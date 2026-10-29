@@ -15,29 +15,22 @@ const Banner = () => {
     const [movie, setMovie] = useState({});
 
     useEffect(() => {
-        const fetchData = async () => {
+        (async () => {
             try {
-                const request = await axios.get(
-                    requests.fetchNetflixOriginals
-                );
-
-                console.log('TMDB response:', request);
-
-                const results = request.data.results;
-
-                if (results && results.length > 0) {
-                    const randomMovie =
-                        results[Math.floor(Math.random() * results.length)];
-
-                    setMovie(randomMovie);
-                }
-            } catch (error) {
-                console.log('Error fetching movies:', error);
+                const request =await axios.get(requests.fetchNetflixOriginals)
+                setMovie(request.data.results[
+                    Math.floor(Math.random() * request.data.results.length)
+                ]);
+            }catch (error) {
+                console.log("error", error);
             }
-        };
+    })()
+}, []);
 
-        fetchData();
-    }, []);
+
+function truncate(str, n) {
+    return str?.length > n ? str.substr(0, n-1) + '...' : str;
+}
 
     return (
         <div
@@ -70,9 +63,9 @@ const Banner = () => {
 
                 </div>
 
-                <p className="banner__description">
+                <h1 className="banner__description">
                     {truncate(movie?.overview, 150)}
-                </p>
+                </h1>
 
             </div>
 
